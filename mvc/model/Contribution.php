@@ -1,15 +1,15 @@
 <?php
 class Contribution {
     public $ID; // Contribution ID (int)
-    public $age; // Contribution age (int)
-    public $memberType; // Contribution memberType (int)
-    public $amount; // Contribution amount (float)
+    public $member; // Contribution age (int)
+    public $payed; // Contribution memberType (int)
+    public $bookyear; // Contribution amount (float)
     
-    public function __construct($ID, $name, $memberType, $amount) {
+    public function __construct($ID, $member, $payed, $bookyear) {
         $this->ID = $ID;
-        $this->name = $name;
-        $this->memberType = $memberType;
-        $this->amount = $amount;
+        $this->member = $member;
+        $this->payed = $payed;
+        $this->bookyear = $bookyear;
     }
 }
 ?>
