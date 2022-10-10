@@ -1,0 +1,26 @@
+<?php include './inc/templates/header.php'; ?>
+        <section class="text-black">
+            <p>Op deze pagina kunt u de verschillende families aanmaken. U kunt pas na het aanmaken van families familie leden toevoegen via de Leden pagina. Verwijdert u hier een familie dan zullen alle contributies en/of leden hiervan verdwijnen. Bedenk dus goed of u zeker een familie wilt verwijderen. Dit kan grote gevolgen hebben.</p>
+
+            <?php if (isset($_GET['action']) && $_GET['action'] === 'add') { ?>
+                <?php $controller->addFamilyForm(); ?>
+            <?php } elseif (isset($_GET['id']) && isset($_GET['action']) && ($_GET['action'] === 'update' || $_GET['action'] === 'delete')) { ?>
+                <?php if ($_GET['action'] === 'update') { ?>
+                    <?php $controller->editFamilyForm(); ?>
+                <?php } ?>
+                <?php if ($_GET['action'] === 'delete') { ?>
+                    <?php $controller->deleteFamilyForm(); ?>
+                <?php } ?>
+            <?php } else { ?>
+            <a href="./families.php?action=add">
+                <button class="good">Familie(s) toevoegen</button>
+            </a>
+            <?php $controller->listFamilies(); ?>
+            <?php } ?>
+        </section>
+    </main>
+    <footer class="text-center">
+        <h5>&copy; 2022 - 2023 Leden Administratie Paneel</h5>
+    </footer>
+</body>
+</html>
