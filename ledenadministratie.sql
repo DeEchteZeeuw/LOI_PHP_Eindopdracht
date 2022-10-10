@@ -51,7 +51,6 @@ INSERT INTO `boekjaar` (`ID`, `Jaar`, `Bedrag`) VALUES
 CREATE TABLE `contributie` (
   `ID` int(11) NOT NULL,
   `Lid` int(100) NOT NULL,
-  `Soort Lid` int(100) NOT NULL,
   `Betaald` float NOT NULL DEFAULT '0',
   `Boekjaar` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -60,9 +59,9 @@ CREATE TABLE `contributie` (
 -- Gegevens worden geëxporteerd voor tabel `contributie`
 --
 
-INSERT INTO `contributie` (`ID`, `Lid`, `Soort Lid`, `Betaald`, `Boekjaar`) VALUES
-(2, 1, 3, 75, 2),
-(3, 1, 3, 100, 3);
+INSERT INTO `contributie` (`ID`, `Lid`, `Betaald`, `Boekjaar`) VALUES
+(2, 1, 75, 2),
+(3, 1, 100, 3);
 
 -- --------------------------------------------------------
 
