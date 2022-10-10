@@ -1,6 +1,6 @@
 <form id="AddContribution" method="POST">
     <label for="contribution_member">
-        Familie <?php if (isset($error_member)) echo '<span class="error">' . $error_member . '</span>'; ?>
+        Lid <?php if (isset($error_member)) echo '<span class="error">' . $error_member . '</span>'; ?>
         <select name="contribution_member" id="contribution_member" required>
             <option value="1">{Naam}</option>
             <option value="2">{Naam}</option>
@@ -13,7 +13,7 @@
         <input type="number" name="contribution_payed" id="contribution_payed" required step="0.01">
     </label>
     <label for="contribution_bookyear">
-        Familie <?php if (isset($error_bookyear)) echo '<span class="error">' . $error_bookyear . '</span>'; ?>
+        Boekjaar <?php if (isset($error_bookyear)) echo '<span class="error">' . $error_bookyear . '</span>'; ?>
         <select name="contribution_bookyear" id="contribution_bookyear" required>
             <option value="1">{Naam}</option>
             <option value="2">{Naam}</option>
