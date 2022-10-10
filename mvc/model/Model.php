@@ -2,6 +2,7 @@
 include_once("./mvc/model/BookYear.php");
 include_once("./mvc/model/Family.php");
 include_once("./mvc/model/FamilyMember.php");
+include_once("./mvc/model/Contribution.php");
 
 class Model {
 
@@ -323,6 +324,115 @@ class Model {
             ]);
 
             echo "Succesvol familie lid verwijderd";
+        } catch(PDOException $e) {
+            // Show an error message if there is one.
+            echo 'Er ging iets fout!';
+            echo $e->getMessage();
+        }
+    }
+
+    // Contribution Functions
+    public function getContributionsList() {
+        include 'inc/process/connect.php';
+
+        $contributions = array();
+
+        try {
+            $stmt = $conn->prepare("SELECT * FROM contributie");
+            $stmt->execute();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $contributions[] = new Contribution($row['ID'], $row['Lid'], $row['Betaald'], $row['Boekjaar']);
+            }
+        } catch(PDOException $e) {
+            echo "Foutmelding: " . $e->getMessage();
+        }
+        return $contributions;
+    } 
+
+    // This function allows us to retrieve a single product from the database by its ID.
+    public function getContribution($number) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        try {
+            // Create a select statement that associates an ID through a WHERE clause. This is ID is the article number.
+            $stmt = $conn->prepare("SELECT * FROM contributie WHERE ID = :id");
+           
+            // Link the item number to the key ID.
+            $stmt->execute([
+                'id' => $number
+            ]);
+
+            // set the resulting array to associative and loop through the results
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                return new Contribution($row['ID'], $row['Lid'], $row['Betaald'], $row['Boekjaar']);
+            }
+        } catch(PDOException $e) {
+            // Show the error message if there is one.
+            echo "Foutmelding: " . $e->getMessage();
+            return null;
+        }
+    }
+    
+    public function addContribution($member, $payed, $bookyear) {
+        include 'inc/process/connect.php';
+
+        try {
+            $statement = $conn->prepare('INSERT INTO contributie (Lid, Betaald, Boekjaar)
+            VALUES (:member, :payed, :bookyear)');
+
+            $statement->execute([
+                'member' => intval($member),
+                'payed' => floatval($payed),
+                'bookyear' => intval($bookyear)
+            ]);
+
+            echo "Succesvol contributie toegevoegd";
+        } catch(PDOException $e) {
+            echo 'Er ging iets fout!';
+            echo $e->getMessage();
+        }
+    }
+
+    public function editContribution($contribution) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        try {
+            // Create an update statement using the ID and the other fields you have with an Article.
+            $statement = $conn->prepare('UPDATE contributie SET Lid = :member, Betaald = :payed, Boekjaar = :bookyear WHERE ID = :id');
+
+            // Associate the variables with the keys that are requested.
+            $statement->execute([
+                'id' => $contribution->ID,
+                'member' => intval($contribution->member),
+                'payed' => floatval($contribution->payed),
+                'bookyear' => intval($contribution->bookyear)
+            ]);
+
+            echo "Succesvol contributie aangepast";
+        } catch(PDOException $e) {
+            // Display an error message if things have gone wrong.
+            echo 'Er ging iets fout!';
+            echo $e->getMessage();
+        }
+    }
+
+    public function deleteContribution($number) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        try {
+            // We create a delete statement linked by the item number and the ID provided.
+            $statement = $conn->prepare('DELETE FROM contributie WHERE ID = :id');
+
+            // Link the item number to the ID.
+            $statement->execute([
+                'id' => $number,
+            ]);
+
+            echo "Succesvol contributie verwijderd";
         } catch(PDOException $e) {
             // Show an error message if there is one.
             echo 'Er ging iets fout!';
