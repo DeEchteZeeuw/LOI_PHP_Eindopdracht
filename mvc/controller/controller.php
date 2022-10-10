@@ -304,4 +304,102 @@ class Controller {
             echo 'Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.';
         }
     }
+    
+    // Contributions Functions
+    public function listContributions() {
+        $Contributions = $this->model->getContributionsList();
+
+        include './mvc/view/contributionslist.php';
+    }
+    
+    public function addContributionForm() {
+        include './inc/process/connect.php';
+        // See if a form was sent with method POST and if the required fields were filled in.
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['contribution_submit']) && isset($_POST['contribution_member']) && isset($_POST['contribution_payed']) && isset($_POST['contribution_bookyear'])) {
+            if (empty($_POST['contribution_member'])) {
+                $error_member = 'De ingevoerde lid is leeg';
+            }
+
+            if (empty($_POST['contribution_payed'])) {
+                $error_payed = 'De ingevoerde betaalde bedrag is leeg';
+            }
+
+            if (empty($_POST['contribution_bookyear'])) {
+                $error_bookyear = 'De ingevoerde boekjaar is leeg';
+            }
+
+            if (!isset($error_member) && !isset($error_payed) && !isset($error_bookyear)) {
+                $this->model->addContribution($_POST['contribution_member'], floatval($_POST['contribution_payed']), $_POST['contribution_bookyear']);
+            }
+        }
+
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            include './mvc/view/addContributionForm.php';
+        } else {
+            // There is no database connection. Show a text that this is so.
+            echo 'Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.';
+        }
+    }
+    
+    public function editContributionForm() {
+        include './inc/process/connect.php';
+        include_once('./mvc/model/Contribution.php');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['contribution_edit']) && isset($_POST['contribution_id']) && isset($_POST['contribution_member']) && isset($_POST['contribution_payed']) && isset($_POST['contribution_bookyear'])) {
+            if (isset($_GET) && isset($_GET['id'])) {
+                if ($_GET['id'] != $_POST['contribution_id']) {
+                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    return;
+                }
+            }
+
+            if (empty($_POST['contribution_member'])) {
+                $error_member = 'De ingevoerde lid is leeg';
+            }
+
+            if (empty($_POST['contribution_payed'])) {
+                $error_payed = 'De ingevoerde betaalde bedrag is leeg';
+            }
+
+            if (empty($_POST['contribution_bookyear'])) {
+                $error_bookyear = 'De ingevoerde boekjaar is leeg';
+            }
+
+            if (!isset($error_member) && !isset($error_payed) && !isset($error_bookyear)) {
+                $this->model->editContribution(new Contribution($_POST['contribution_id'], $_POST['contribution_member'], floatval($_POST['contribution_payed']), $_POST['contribution_bookyear']));
+            }
+        }
+
+        if (isset($_GET) && isset($_GET['id'])) {
+            $contribution = $this->model->getContribution($_GET['id']);
+            include './mvc/view/editContributionForm.php';
+        } else {
+            echo 'Geen contributie opgevraagd';
+        }
+        
+    }
+    
+    public function deleteContributionForm() {
+        include './inc/process/connect.php';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['contribution_delete']) && isset($_POST['contribution_id'])) {
+            if (isset($_GET) && isset($_GET['id'])) {
+                if ($_GET['id'] != $_POST['contribution_id']) {
+                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    return;
+                }
+            }
+            
+            $this->model->deleteContribution($_POST['contribution_id']);
+        }
+
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            include './mvc/view/deleteContributionForm.php';
+        } else {
+            // There is no database connection. Show a text that this is so.
+            echo 'Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.';
+        }
+    }
 }
