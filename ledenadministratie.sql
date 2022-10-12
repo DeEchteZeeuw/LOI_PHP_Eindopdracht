@@ -128,10 +128,10 @@ INSERT INTO `gebruikers` (`ID`, `Email`, `Wachtwoord`) VALUES
 -- Tabelstructuur voor tabel `soort lid`
 --
 
-CREATE TABLE `soort lid` (
+CREATE TABLE `soortlid` (
   `ID` int(100) NOT NULL,
   `Naam` varchar(255) NOT NULL,
-  `Contributie Percentage` int(3) NOT NULL DEFAULT '100',
+  `ContributiePercentage` int(3) NOT NULL DEFAULT '100',
   `Omschrijving` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -139,7 +139,7 @@ CREATE TABLE `soort lid` (
 -- Gegevens worden geëxporteerd voor tabel `soort lid`
 --
 
-INSERT INTO `soort lid` (`ID`, `Naam`, `Contributie Percentage`, `Omschrijving`) VALUES
+INSERT INTO `soortlid` (`ID`, `Naam`, `ContributiePercentage`, `Omschrijving`) VALUES
 (1, 'Standaard', 100, 'Dit lid is een standaard lid en betaald het normale contributie bedrag.'),
 (2, 'Speciaal', 110, 'Dit lid kan buiten de standaard tijden het club terrein betreden voor vrije tijds besteding.'),
 (3, 'Exceptioneel', 125, 'Dit lid kan buiten de standaard tijden het club terrein betreden voor vrije tijds besteding en niet leden als gast meenemen.');
@@ -160,7 +160,6 @@ ALTER TABLE `boekjaar`
 --
 ALTER TABLE `contributie`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `Soort Lid` (`Soort Lid`),
   ADD KEY `Lid` (`Lid`),
   ADD KEY `Boekjaar` (`Boekjaar`);
 
@@ -177,7 +176,7 @@ ALTER TABLE `familie`
 ALTER TABLE `familielid`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `Familie` (`Familie`),
-  ADD KEY `Soort lid` (`SoortLid`);
+  ADD KEY `Soortlid` (`SoortLid`);
 
 --
 -- Indexen voor tabel `gebruikers`
@@ -187,9 +186,9 @@ ALTER TABLE `gebruikers`
   ADD UNIQUE KEY `Email` (`Email`);
 
 --
--- Indexen voor tabel `soort lid`
+-- Indexen voor tabel `soortlid`
 --
-ALTER TABLE `soort lid`
+ALTER TABLE `soortlid`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `Naam` (`Naam`);
 
@@ -228,9 +227,9 @@ ALTER TABLE `gebruikers`
   MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT voor een tabel `soort lid`
+-- AUTO_INCREMENT voor een tabel `soortlid`
 --
-ALTER TABLE `soort lid`
+ALTER TABLE `soortlid`
   MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -241,7 +240,6 @@ ALTER TABLE `soort lid`
 -- Beperkingen voor tabel `contributie`
 --
 ALTER TABLE `contributie`
-  ADD CONSTRAINT `contributie_ibfk_2` FOREIGN KEY (`Soort Lid`) REFERENCES `soort lid` (`ID`),
   ADD CONSTRAINT `contributie_ibfk_3` FOREIGN KEY (`Boekjaar`) REFERENCES `boekjaar` (`ID`),
   ADD CONSTRAINT `contributie_ibfk_4` FOREIGN KEY (`Lid`) REFERENCES `familielid` (`ID`);
 
@@ -250,7 +248,7 @@ ALTER TABLE `contributie`
 --
 ALTER TABLE `familielid`
   ADD CONSTRAINT `familielid_ibfk_1` FOREIGN KEY (`Familie`) REFERENCES `familie` (`ID`),
-  ADD CONSTRAINT `familielid_ibfk_2` FOREIGN KEY (`SoortLid`) REFERENCES `soort lid` (`ID`);
+  ADD CONSTRAINT `familielid_ibfk_2` FOREIGN KEY (`SoortLid`) REFERENCES `soortlid` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

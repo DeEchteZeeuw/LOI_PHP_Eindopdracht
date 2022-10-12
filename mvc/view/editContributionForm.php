@@ -19,16 +19,6 @@
         <input type="number" name="contribution_payed" id="contribution_payed" value="<?php echo $contribution->payed; ?>" required step="0.01">
     </label>
 
-    <label for="family_family">
-        Soort lid:
-        <select name="contribution_membertype" id="contribution_membertype" required>
-            <option value="1" <?php if ($contribution->memberType === '1') echo 'selected'; ?>>{Naam}</option>
-            <option value="2">{Naam}</option>
-            <option value="3">{Naam}</option>
-            <option value="4">{Naam}</option>
-        </select>
-    </label>
-
     <label for="contribution_bookyear">
         Boekjaar <?php if (isset($error_bookyear)) echo '<span class="error">' . $error_bookyear . '</span>'; ?>
         <select name="contribution_bookyear" id="contribution_bookyear" required>

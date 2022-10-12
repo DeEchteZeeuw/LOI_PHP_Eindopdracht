@@ -3,6 +3,7 @@ include_once("./mvc/model/BookYear.php");
 include_once("./mvc/model/Family.php");
 include_once("./mvc/model/FamilyMember.php");
 include_once("./mvc/model/Contribution.php");
+include_once("./mvc/model/MemberType.php");
 
 class Model {
 
@@ -433,6 +434,115 @@ class Model {
             ]);
 
             echo "Succesvol contributie verwijderd";
+        } catch(PDOException $e) {
+            // Show an error message if there is one.
+            echo 'Er ging iets fout!';
+            echo $e->getMessage();
+        }
+    }
+
+    // MemberType Functions
+    public function getMemberTypesList() {
+        include 'inc/process/connect.php';
+
+        $memberTypes = array();
+
+        try {
+            $stmt = $conn->prepare("SELECT * FROM soortlid");
+            $stmt->execute();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $memberTypes[] = new MemberType($row['ID'], $row['Naam'], $row['ContributiePercentage'], $row['Omschrijving']);
+            }
+        } catch(PDOException $e) {
+            echo "Foutmelding: " . $e->getMessage();
+        }
+        return $memberTypes;
+    } 
+
+    // This function allows us to retrieve a single product from the database by its ID.
+    public function getMemberType($number) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        try {
+            // Create a select statement that associates an ID through a WHERE clause. This is ID is the article number.
+            $stmt = $conn->prepare("SELECT * FROM soortlid WHERE ID = :id");
+           
+            // Link the item number to the key ID.
+            $stmt->execute([
+                'id' => $number
+            ]);
+
+            // set the resulting array to associative and loop through the results
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                return new MemberType($row['ID'], $row['Naam'], $row['ContributiePercentage'], $row['Omschrijving']);
+            }
+        } catch(PDOException $e) {
+            // Show the error message if there is one.
+            echo "Foutmelding: " . $e->getMessage();
+            return null;
+        }
+    }
+    
+    public function addMemberType($name, $procentage, $description) {
+        include 'inc/process/connect.php';
+
+        try {
+            $statement = $conn->prepare('INSERT INTO soortlid (Naam, ContributiePercentage, Omschrijving)
+            VALUES (:name, :procentage, :description)');
+
+            $statement->execute([
+                'name' => $name,
+                'procentage' => floatval($procentage),
+                'description' => $description
+            ]);
+
+            echo "Succesvol abonnement toegevoegd";
+        } catch(PDOException $e) {
+            echo 'Er ging iets fout!';
+            echo $e->getMessage();
+        }
+    }
+
+    public function editMemberType($memberType) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        try {
+            // Create an update statement using the ID and the other fields you have with an Article.
+            $statement = $conn->prepare('UPDATE soortlid SET Naam = :name, ContributiePercentage = :procentage, Omschrijving = :description WHERE ID = :id');
+
+            // Associate the variables with the keys that are requested.
+            $statement->execute([
+                'id' => $memberType->ID,
+                'name' => $memberType->name,
+                'procentage' => floatval($memberType->procentage),
+                'description' => $memberType->description
+            ]);
+
+            echo "Succesvol abonnement aangepast";
+        } catch(PDOException $e) {
+            // Display an error message if things have gone wrong.
+            echo 'Er ging iets fout!';
+            echo $e->getMessage();
+        }
+    }
+
+    public function deleteMemberType($number) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        try {
+            // We create a delete statement linked by the item number and the ID provided.
+            $statement = $conn->prepare('DELETE FROM soortlid WHERE ID = :id');
+
+            // Link the item number to the ID.
+            $statement->execute([
+                'id' => $number,
+            ]);
+
+            echo "Succesvol abonnement verwijderd";
         } catch(PDOException $e) {
             // Show an error message if there is one.
             echo 'Er ging iets fout!';

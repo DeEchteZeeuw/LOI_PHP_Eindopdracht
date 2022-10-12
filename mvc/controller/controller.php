@@ -402,4 +402,102 @@ class Controller {
             echo 'Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.';
         }
     }
+
+    // MemberType Functions
+    public function listMemberTypes() {
+        $MemberTypes = $this->model->getMemberTypesList();
+
+        include './mvc/view/membertypeslist.php';
+    }
+    
+    public function addMemberTypeForm() {
+        include './inc/process/connect.php';
+        // See if a form was sent with method POST and if the required fields were filled in.
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['membertype_submit']) && isset($_POST['membertype_name']) && isset($_POST['membertype_procentage']) && isset($_POST['membertype_description'])) {
+            if (empty($_POST['membertype_name'])) {
+                $error_name = 'De ingevoerde naam is leeg';
+            }
+
+            if (empty($_POST['membertype_procentage'])) {
+                $error_procentage = 'De ingevoerde percentage is leeg';
+            }
+
+            if (empty($_POST['membertype_description'])) {
+                $error_description = 'De ingevoerde beschrijving is leeg';
+            }
+
+            if (!isset($error_name) && !isset($error_procentage) && !isset($error_description)) {
+                $this->model->addMemberType($_POST['membertype_name'], floatval($_POST['membertype_procentage']), $_POST['membertype_description']);
+            }
+        }
+
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            include './mvc/view/addMemberTypeForm.php';
+        } else {
+            // There is no database connection. Show a text that this is so.
+            echo 'Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.';
+        }
+    }
+    
+    public function editMemberTypeForm() {
+        include './inc/process/connect.php';
+        include_once('./mvc/model/MemberType.php');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['membertype_edit']) && isset($_POST['membertype_id']) && isset($_POST['membertype_name']) && isset($_POST['membertype_procentage']) && isset($_POST['membertype_description'])) {
+            if (isset($_GET) && isset($_GET['id'])) {
+                if ($_GET['id'] != $_POST['membertype_id']) {
+                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    return;
+                }
+            }
+
+            if (empty($_POST['membertype_name'])) {
+                $error_name = 'De ingevoerde naam is leeg';
+            }
+
+            if (empty($_POST['membertype_procentage'])) {
+                $error_procentage = 'De ingevoerde percentage is leeg';
+            }
+
+            if (empty($_POST['membertype_description'])) {
+                $error_description = 'De ingevoerde beschrijving is leeg';
+            }
+
+            if (!isset($error_name) && !isset($error_procentage) && !isset($error_description)) {
+                $this->model->editMemberType(new MemberType($_POST['membertype_id'], $_POST['membertype_name'], floatval($_POST['membertype_procentage']), $_POST['membertype_description']));
+            }
+        }
+
+        if (isset($_GET) && isset($_GET['id'])) {
+            $memberType = $this->model->getMemberType($_GET['id']);
+            include './mvc/view/editMemberTypeForm.php';
+        } else {
+            echo 'Geen abonnement opgevraagd';
+        }
+        
+    }
+    
+    public function deleteMemberTypeForm() {
+        include './inc/process/connect.php';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['membertype_delete']) && isset($_POST['membertype_id'])) {
+            if (isset($_GET) && isset($_GET['id'])) {
+                if ($_GET['id'] != $_POST['membertype_id']) {
+                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    return;
+                }
+            }
+            
+            $this->model->deleteMemberType($_POST['membertype_id']);
+        }
+
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            include './mvc/view/deleteMemberTypeForm.php';
+        } else {
+            // There is no database connection. Show a text that this is so.
+            echo 'Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.';
+        }
+    }
 }

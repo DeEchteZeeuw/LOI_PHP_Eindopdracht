@@ -311,6 +311,9 @@ $controller = new Controller();
                     <a href="./contributies.php" <?php if (basename(substr($_SERVER['SCRIPT_NAME'], 1), '.php') === 'contributies') echo 'class="active"'; ?>><i class="fa-solid fa-coins"></i> Contributie(s)</a>
                 </li>
                 <li>
+                    <a href="./abonnementen.php" <?php if (basename(substr($_SERVER['SCRIPT_NAME'], 1), '.php') === 'abonnementen') echo 'class="active"'; ?>><i class="fa-solid fa-coins"></i> Abonnement(en)</a>
+                </li>
+                <li>
                     <a href="./logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Uitloggen</a>
                 </li>
             </ul>

@@ -15,7 +15,7 @@
             <a href="./contributies.php?action=add">
                 <button class="good">Contributie toevoegen</button>
             </a>
-            <?php $controller->listContributies(); ?>
+            <?php $controller->listContributions(); ?>
             <?php } ?>
         </section>
     </main>
