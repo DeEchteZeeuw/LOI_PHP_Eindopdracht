@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Gegenereerd op: 10 okt 2022 om 10:11
+-- Gegenereerd op: 12 okt 2022 om 13:09
 -- Serverversie: 5.7.34
 -- PHP-versie: 7.4.21
 
@@ -38,9 +38,9 @@ CREATE TABLE `boekjaar` (
 --
 
 INSERT INTO `boekjaar` (`ID`, `Jaar`, `Bedrag`) VALUES
+(1, 2022, 50),
 (2, 2021, 150),
-(3, 2020, 110),
-(5, 2022, 50);
+(3, 2020, 110);
 
 -- --------------------------------------------------------
 
@@ -60,7 +60,6 @@ CREATE TABLE `contributie` (
 --
 
 INSERT INTO `contributie` (`ID`, `Lid`, `Betaald`, `Boekjaar`) VALUES
-(2, 1, 75, 2),
 (3, 1, 100, 3);
 
 -- --------------------------------------------------------
@@ -101,7 +100,8 @@ CREATE TABLE `familielid` (
 --
 
 INSERT INTO `familielid` (`ID`, `Naam`, `Familie`, `Geboortedatum`, `SoortLid`) VALUES
-(1, 'Mark', 1, '2022-10-03', 1);
+(1, 'Mark', 1, '2022-10-03', 2),
+(3, 'Ruben', 1, '2001-10-06', 1);
 
 -- --------------------------------------------------------
 
@@ -125,7 +125,7 @@ INSERT INTO `gebruikers` (`ID`, `Email`, `Wachtwoord`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `soort lid`
+-- Tabelstructuur voor tabel `soortlid`
 --
 
 CREATE TABLE `soortlid` (
@@ -136,7 +136,7 @@ CREATE TABLE `soortlid` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Gegevens worden geëxporteerd voor tabel `soort lid`
+-- Gegevens worden geëxporteerd voor tabel `soortlid`
 --
 
 INSERT INTO `soortlid` (`ID`, `Naam`, `ContributiePercentage`, `Omschrijving`) VALUES
@@ -200,13 +200,13 @@ ALTER TABLE `soortlid`
 -- AUTO_INCREMENT voor een tabel `boekjaar`
 --
 ALTER TABLE `boekjaar`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT voor een tabel `contributie`
 --
 ALTER TABLE `contributie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT voor een tabel `familie`
@@ -218,7 +218,7 @@ ALTER TABLE `familie`
 -- AUTO_INCREMENT voor een tabel `familielid`
 --
 ALTER TABLE `familielid`
-  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT voor een tabel `gebruikers`
@@ -230,7 +230,7 @@ ALTER TABLE `gebruikers`
 -- AUTO_INCREMENT voor een tabel `soortlid`
 --
 ALTER TABLE `soortlid`
-  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Beperkingen voor geëxporteerde tabellen
