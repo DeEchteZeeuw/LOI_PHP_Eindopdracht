@@ -2,6 +2,23 @@
         <section class="text-black">
             <p>Welkom op de leden administratie,</p>
             <p>Bekijk hieronder hoeveel er nog moet worden betaald aan contributie per lid. Heb je vragen of klachten dan kunt u dit melden bij het bestuur of de ontwikkelaar contacteren via <a href="mailto:rubendalebout@gmail.com">rubendalebout@gmail.com</a> bij uitsluitend klachten over de applicatie.</p>
+        
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lid</th>
+                        <th>Openstaande bedrag</th>
+                        <th>Totale borg</th>
+                        <th>Procentueel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td>Pietje puk</td>
+                    <td>250</td>
+                    <td>500</td>
+                    <td>50/100</td>
+                </tbody>
+            </table>
         </section>
     </main>
     <footer class="text-center">
