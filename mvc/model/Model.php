@@ -68,6 +68,12 @@ class Model {
             echo 'Er ging iets fout!';
             echo $e->getMessage();
         }
+        
+        $familyMembers = $this->getFamilyMembersList();
+        
+        foreach($familyMembers as $familyMember) {
+            $this->addContribution($familyMember->ID, 0, $conn->insert_id);
+        }
     }
 
     public function editBookYear($bookyear) {
