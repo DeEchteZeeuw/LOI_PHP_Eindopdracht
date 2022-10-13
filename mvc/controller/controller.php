@@ -233,6 +233,9 @@ class Controller {
 
         // See if the conn variable is declared and if it has a value. 
         if (isset($conn) && $conn) {
+            $families = $this->model->getFamiliesList();
+            $membertypes = $this->model->getMemberTypesList();
+
             include './mvc/view/addFamilyMemberForm.php';
         } else {
             // There is no database connection. Show a text that this is so.
@@ -274,7 +277,11 @@ class Controller {
         }
 
         if (isset($_GET) && isset($_GET['id'])) {
+            $families = $this->model->getFamiliesList();
+            $membertypes = $this->model->getMemberTypesList();
+
             $familyMember = $this->model->getFamilyMember($_GET['id']);
+
             include './mvc/view/editFamilyMemberForm.php';
         } else {
             echo 'Geen familie lid opgevraagd';
@@ -335,6 +342,9 @@ class Controller {
 
         // See if the conn variable is declared and if it has a value. 
         if (isset($conn) && $conn) {
+            $members = $this->model->getFamilyMembersList();
+            $bookyears = $this->model->getBookYearsList();
+
             include './mvc/view/addContributionForm.php';
         } else {
             // There is no database connection. Show a text that this is so.
@@ -372,7 +382,11 @@ class Controller {
         }
 
         if (isset($_GET) && isset($_GET['id'])) {
+            $members = $this->model->getFamilyMembersList();
+            $bookyears = $this->model->getBookYearsList();
+
             $contribution = $this->model->getContribution($_GET['id']);
+
             include './mvc/view/editContributionForm.php';
         } else {
             echo 'Geen contributie opgevraagd';

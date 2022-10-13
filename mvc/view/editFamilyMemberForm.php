@@ -12,10 +12,9 @@
     <label for="family_family">
         Familie:
         <select name="familymember_family" id="familymember_family" required>
-            <option value="1" <?php if ($familyMember->family === '1') echo 'selected'; ?>>{Naam}</option>
-            <option value="2">{Naam}</option>
-            <option value="3">{Naam}</option>
-            <option value="4">{Naam}</option>
+            <?php foreach($families as $family) { ?>
+            <option value="<?php echo $family->ID; ?>" <?php if ($family->ID === $familyMember->family) echo 'selected'; ?>><?php echo $family->name; ?></option>
+            <?php } ?>
         </select>
     </label>
 
@@ -27,10 +26,9 @@
     <label for="family_family">
         Soort lid:
         <select name="familymember_membertype" id="familymember_membertype" required>
-            <option value="1" <?php if ($familyMember->memberType === '1') echo 'selected'; ?>>{Naam}</option>
-            <option value="2">{Naam}</option>
-            <option value="3">{Naam}</option>
-            <option value="4">{Naam}</option>
+            <?php foreach($membertypes as $membertype) { ?>
+            <option value="<?php echo $membertype->ID; ?>" <?php if ($membertype->ID === $familyMember->memberType) echo 'selected'; ?>><?php echo $membertype->name; ?></option>
+            <?php } ?>
         </select>
     </label>
 

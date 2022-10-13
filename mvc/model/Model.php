@@ -215,6 +215,8 @@ class Model {
         include 'inc/process/connect.php';
 
         try {
+            $this->deleteFamilyMember(0, $number);
+
             // We create a delete statement linked by the item number and the ID provided.
             $statement = $conn->prepare('DELETE FROM familie WHERE ID = :id');
 
@@ -274,6 +276,35 @@ class Model {
             return null;
         }
     }
+
+    public function getFamilyMembers($family = 0, $memberType = 0) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        $familyMembers = [];
+
+        try {
+            // Create a select statement that associates an ID through a WHERE clause. This is ID is the article number.
+            $stmt = $conn->prepare("SELECT * FROM familielid WHERE Familie = :family OR SoortLid = :membertype");
+           
+            // Link the item number to the key ID.
+            $stmt->execute([
+                'family' => $family,
+                'membertype' => $memberType
+            ]);
+
+            // set the resulting array to associative and loop through the results
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $familyMembers[] = new FamilyMember($row['ID'], $row['Naam'], $row['Familie'], $row['Geboortedatum'], $row['SoortLid']);
+            }
+        } catch(PDOException $e) {
+            // Show the error message if there is one.
+            echo "Foutmelding: " . $e->getMessage();
+            return null;
+        }
+
+        return $familyMembers;
+    }
     
     public function addFamilyMember($name, $family, $birthdate, $memberType) {
         include 'inc/process/connect.php';
@@ -321,17 +352,28 @@ class Model {
         }
     }
 
-    public function deleteFamilyMember($number) {
+    public function deleteFamilyMember($number = 0, $family = 0) {
         // We add the connect.php for connecting to the database.
         include 'inc/process/connect.php';
 
         try {
+            if (isset($family) && $family != 0) {
+                foreach($this->getFamilyMembers($family) as $familyMember) {
+                    $this->deleteContribution(0, 0, $familyMember->ID);
+                }
+            }
+
+            if (isset($number) && $number != 0) {
+                $this->deleteContribution(0, 0, $number);
+            }
+
             // We create a delete statement linked by the item number and the ID provided.
-            $statement = $conn->prepare('DELETE FROM familielid WHERE ID = :id');
+            $statement = $conn->prepare('DELETE FROM familielid WHERE ID = :id OR Familie = :family');
 
             // Link the item number to the ID.
             $statement->execute([
                 'id' => $number,
+                'family' => $family,
             ]);
 
             echo "Succesvol familie lid verwijderd";
@@ -430,18 +472,19 @@ class Model {
         }
     }
 
-    public function deleteContribution($number = 0, $bookyear = 0) {
+    public function deleteContribution($number = 0, $bookyear = 0, $member) {
         // We add the connect.php for connecting to the database.
         include 'inc/process/connect.php';
 
         try {
             // We create a delete statement linked by the item number and the ID provided.
-            $statement = $conn->prepare('DELETE FROM contributie WHERE ID = :id OR Boekjaar = :bookyear');
+            $statement = $conn->prepare('DELETE FROM contributie WHERE ID = :id OR Boekjaar = :bookyear OR Lid = :member');
 
             // Link the item number to the ID.
             $statement->execute([
                 'id' => $number,
                 'bookyear' => $bookyear,
+                'member' => $member,
             ]);
 
             echo "Succesvol contributie verwijderd";
@@ -544,7 +587,18 @@ class Model {
         // We add the connect.php for connecting to the database.
         include 'inc/process/connect.php';
 
+        if ($number === 1) {
+            echo 'De Standaard abonnement kan niet worden verwijderd. Dit is omdat er altijd een abonnement beschikbaar moet zijn.';
+            return;
+        }
+
         try {
+            foreach($this->getFamilyMembers(0, intval($number)) as $member) {
+                $member->memberType = 1;
+
+                $this->editFamilyMember($member);
+            }
+
             // We create a delete statement linked by the item number and the ID provided.
             $statement = $conn->prepare('DELETE FROM soortlid WHERE ID = :id');
 
