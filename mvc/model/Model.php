@@ -63,17 +63,19 @@ class Model {
                 'bedrag' => floatval($price),
             ]);
 
+            $familyMembers = $this->getFamilyMembersList();
+        
+            foreach($familyMembers as $familyMember) {
+                $this->addContribution($familyMember->ID, 0, $conn->lastInsertId());
+            }
+
             echo "Succesvol boekjaar toegevoegd";
         } catch(PDOException $e) {
             echo 'Er ging iets fout!';
             echo $e->getMessage();
         }
         
-        $familyMembers = $this->getFamilyMembersList();
         
-        foreach($familyMembers as $familyMember) {
-            $this->addContribution($familyMember->ID, 0, $conn->insert_id);
-        }
     }
 
     public function editBookYear($bookyear) {
@@ -104,6 +106,8 @@ class Model {
         include 'inc/process/connect.php';
 
         try {
+            $this->deleteContribution(0, $number);
+
             // We create a delete statement linked by the item number and the ID provided.
             $statement = $conn->prepare('DELETE FROM boekjaar WHERE ID = :id');
 
@@ -426,17 +430,18 @@ class Model {
         }
     }
 
-    public function deleteContribution($number) {
+    public function deleteContribution($number = 0, $bookyear = 0) {
         // We add the connect.php for connecting to the database.
         include 'inc/process/connect.php';
 
         try {
             // We create a delete statement linked by the item number and the ID provided.
-            $statement = $conn->prepare('DELETE FROM contributie WHERE ID = :id');
+            $statement = $conn->prepare('DELETE FROM contributie WHERE ID = :id OR Boekjaar = :bookyear');
 
             // Link the item number to the ID.
             $statement->execute([
                 'id' => $number,
+                'bookyear' => $bookyear,
             ]);
 
             echo "Succesvol contributie verwijderd";
