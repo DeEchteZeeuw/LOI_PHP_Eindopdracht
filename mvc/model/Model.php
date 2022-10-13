@@ -427,6 +427,34 @@ class Model {
             return null;
         }
     }
+
+    public function getContributions($member) {
+        // We add the connect.php for connecting to the database.
+        include 'inc/process/connect.php';
+
+        $contributions = [];
+
+        try {
+            // Create a select statement that associates an ID through a WHERE clause. This is ID is the article number.
+            $stmt = $conn->prepare("SELECT * FROM contributie WHERE Lid = :member");
+           
+            // Link the item number to the key ID.
+            $stmt->execute([
+                'member' => $member
+            ]);
+
+            // set the resulting array to associative and loop through the results
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $contributions[] = new Contribution($row['ID'], $row['Lid'], $row['Betaald'], $row['Boekjaar']);
+            }
+        } catch(PDOException $e) {
+            // Show the error message if there is one.
+            echo "Foutmelding: " . $e->getMessage();
+            return null;
+        }
+
+        return $contributions;
+    }
     
     public function addContribution($member, $payed, $bookyear) {
         include 'inc/process/connect.php';

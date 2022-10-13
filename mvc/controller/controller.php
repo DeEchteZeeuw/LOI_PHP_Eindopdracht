@@ -8,6 +8,34 @@ class Controller {
         $this->model = new Model();
     }
 
+    // Dashboard functions
+    public function listDashboard() {
+        $families = $this->model->getFamiliesList();
+
+        foreach($families as $family) {
+            $family->members = $this->model->getFamilyMembers($family->ID);
+
+            $family->open_contribution = 0;
+            $family->payed_contribution = 0;
+            $family->total_contribution = 0;
+
+            foreach($family->members as $member) {
+                $member->memberType = $this->model->getMemberType($member->memberType);
+                $member->contributions = $this->model->getContributions($member->ID);
+
+                foreach($member->contributions as $contribution) {
+                    $contribution->bookyear = $this->model->getBookYear($contribution->bookyear);
+                }
+            }
+
+            // echo '<pre>';
+            // echo var_dump($family);
+            // echo '</pre>';
+        }
+
+        include './mvc/view/dashboardlist.php';
+    }
+
     // BookYear Functions
 
     public function listBookYears() {
