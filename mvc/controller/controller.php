@@ -25,6 +25,10 @@ class Controller {
 
                 foreach($member->contributions as $contribution) {
                     $contribution->bookyear = $this->model->getBookYear($contribution->bookyear);
+
+                    $family->open_contribution = floatval($family->open_contribution) + (floatval($contribution->bookyear->price) - floatval($contribution->payed));
+                    $family->payed_contribution = floatval($family->payed_contribution) + floatval($contribution->payed);
+                    $family->total_contribution = floatval($family->total_contribution) + floatval($contribution->bookyear->price);
                 }
             }
 
