@@ -100,10 +100,12 @@ class Controller {
         include './mvc/view/bookyearlist.php';
     }
     
+    // The addBookYearForm function was created to provide form handling and insight into the form
     public function addBookYearForm() {
+        // Add the file where the connection to the database is made.
         include './inc/process/connect.php';
 
-        // See if a form was sent with method POST and if the required fields were filled in.
+        // See if a POST request was made and if so if this is the accounting form and if all fields are included
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['bookyear_submit']) && isset($_POST['bookyear_year']) && isset($_POST['bookyear_submit']) && isset($_POST['bookyear_price'])) {
 
             if (!is_numeric($_POST['bookyear_year'])) {
