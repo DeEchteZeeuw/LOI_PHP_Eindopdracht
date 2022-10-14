@@ -1,14 +1,12 @@
 <?php
 session_start();
+// See if the session loggedin exists and is true, if not send the user back to login
 if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
     header("Location: index.php");
     die();
 }
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+// Include the controller of member administration
 include_once('mvc/controller/controller.php');
 $controller = new Controller();
 ?>
@@ -21,12 +19,12 @@ $controller = new Controller();
 
     <title>Leden administratie</title>
 
-    <!-- Style -->
-    <link rel="stylesheet" href="./inc/libraries/fontawesome/css/all.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" id="fontawesome-icons" href="./inc/libraries/fontawesome/css/all.min.css">
+    <link rel="stylesheet" id="main-stylesheet" href="./assets/css/main.min.css">
 
-    <link rel="stylesheet" href="./assets/css/main.min.css">
-
-    <script src="./assets/js/dashboard.min.js"></script>
+    <!-- Scripts -->
+    <script id="dashboard-scripts" src="./assets/js/dashboard.min.js"></script>
 </head>
 <body>
     <header>
