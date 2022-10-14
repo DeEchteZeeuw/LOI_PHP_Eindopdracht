@@ -86,11 +86,17 @@ class Controller {
         include './mvc/view/dashboardlist.php';
     }
 
-    // BookYear Functions
+    /* 
+    *   Bookyear features
+    * Below you will find all functions belonging to and or related to the bookyear page
+    */
 
+    // The listBookYears feature was created to provide insight into all the bookyears using a table
     public function listBookYears() {
+        // Retrieve all fiscal years 
         $BookYears = $this->model->getBookYearsList();
 
+        // Add the file that provides a table so we can make the fiscal years transparent
         include './mvc/view/bookyearlist.php';
     }
     
