@@ -213,6 +213,38 @@ $controller = new Controller();
             cursor: pointer;
             transition: all .5s ease;
         }
+        
+        .message {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+
+            background-color: rgba(245,245,245,0.85);
+            border-color: whitesmoke;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 10px;
+            padding: .25rem 1rem;
+        }
+
+        .message.good {
+            border-color: #54b354;
+            background-color: rgba(106, 229, 106, 0.85);
+            color: white;
+        }
+
+        .message.watchout {
+            border-color: #d1b200;
+            background-color: rgba(255, 215, 0, 0.85);
+            color: white;
+        }
+
+        .message.failure {
+            border-color: #a91d1d;
+            background-color: rgba(222, 39, 39, 0.85);
+            color: white;
+        }
 
         table {
             border-collapse: collapse;
