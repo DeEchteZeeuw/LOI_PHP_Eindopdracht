@@ -11,7 +11,7 @@
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch(PDOException $e) {
         // Send back an error message. As a developer, you want to see the error so you also return the getMessage(). ?>
-        <div class="alert alert-failure">
+        <div class="message failure">
             <p><?php echo $e->getMessage(); ?></p>
         </div>
     <?php }
