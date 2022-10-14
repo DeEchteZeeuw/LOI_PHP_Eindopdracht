@@ -23,18 +23,25 @@ class Controller {
                 $member->memberType = $this->model->getMemberType($member->memberType);
                 $member->contributions = $this->model->getContributions($member->ID);
 
+                $member->open_contribution = 0;
+                $member->payed_contribution = 0;
+                $member->total_contribution = 0;
+
                 foreach($member->contributions as $contribution) {
                     $contribution->bookyear = $this->model->getBookYear($contribution->bookyear);
 
                     $family->open_contribution = floatval($family->open_contribution) + (floatval($contribution->bookyear->price) - floatval($contribution->payed));
                     $family->payed_contribution = floatval($family->payed_contribution) + floatval($contribution->payed);
                     $family->total_contribution = floatval($family->total_contribution) + floatval($contribution->bookyear->price);
+                
+                    $member->open_contribution = floatval($member->open_contribution) + (floatval($contribution->bookyear->price) - floatval($contribution->payed));
+                    $member->payed_contribution = floatval($member->payed_contribution) + floatval($contribution->payed);
+                    $member->total_contribution = floatval($member->total_contribution) + floatval($contribution->bookyear->price);
+
+                    $contribution->open_contribution = (floatval($contribution->bookyear->price) - floatval($contribution->payed));
+                    $contribution->total_contribution = floatval($contribution->bookyear->price);
                 }
             }
-
-            // echo '<pre>';
-            // echo var_dump($family);
-            // echo '</pre>';
         }
 
         include './mvc/view/dashboardlist.php';

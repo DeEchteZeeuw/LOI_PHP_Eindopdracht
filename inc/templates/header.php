@@ -282,9 +282,19 @@ $controller = new Controller();
         .error {
             color: #de2727;
         }
+
+        [hidden="true"] {
+            display: none;
+        }
+
+        [hidden="false"] {
+            display: table-row;
+        }
     </style>
 
     <link rel="stylesheet" href="./inc/libraries/fontawesome/css/all.min.css">
+
+    <script src="./assets/js/dashboard.min.js"></script>
 </head>
 <body>
     <header>
