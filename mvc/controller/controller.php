@@ -1,49 +1,88 @@
 <?php
+// Add the model class to the file
 include_once("./mvc/model/Model.php");
 
 class Controller {
     public $model;
 
+    // When initializing the object for this from
     public function __construct() {
-        $this->model = new Model();
+        // Initialize the model 
+        $this->model = new Model(); 
     }
 
-    // Dashboard functions
+    /* 
+    *   Dashboard features
+    * Below you will find all functions belonging to and or related to the dashboard page
+    */
+    
+    // The ListDashboard feature was created to provide insight into family contributions using a table
     public function listDashboard() {
+        // Retrieve all families registered in the records
         $families = $this->model->getFamiliesList();
 
+        // Go through all the families
         foreach($families as $family) {
+            // Get all family members and put them as objects in the members variable
             $family->members = $this->model->getFamilyMembers($family->ID);
 
+            // Set for the family the open contribution at standard 0
             $family->open_contribution = 0;
+            // Set for the family the payed contribution at standard 0
             $family->payed_contribution = 0;
+            // Set for the family the total contribution at standard 0
             $family->total_contribution = 0;
 
+            // Go through all family members
             foreach($family->members as $member) {
+                // Retrieve the corresponding subscription from this member
                 $member->memberType = $this->model->getMemberType($member->memberType);
+                // Collect all contributions from this member
                 $member->contributions = $this->model->getContributions($member->ID);
 
+                // Set for the member the open contribution at standard 0
                 $member->open_contribution = 0;
+                // Set for the member the payed contribution at standard 0
                 $member->payed_contribution = 0;
+                // Set for the family the total contribution at standard 0
                 $member->total_contribution = 0;
 
+                // Go through all member contributions
                 foreach($member->contributions as $contribution) {
+                    // Retrieve corresponding fiscal year of contribution
                     $contribution->bookyear = $this->model->getBookYear($contribution->bookyear);
 
+                    // Set the family outstanding dues to the new value using this sum
+                    // Sum: open_contribution = current open_contribution from family + (bookyear_price - payed contribution of this contribution)
                     $family->open_contribution = floatval($family->open_contribution) + (floatval($contribution->bookyear->price) - floatval($contribution->payed));
+                    // Set the family paid contribution to the new value using this sum
+                    // Sum: payed_contribution = current payed_contribution from family + payed contribution of this contribution
                     $family->payed_contribution = floatval($family->payed_contribution) + floatval($contribution->payed);
+                    // Set the family total contribution to the new value using this sum
+                    // Sum: total_contribution = current total_contribution from family + price of this contribution
                     $family->total_contribution = floatval($family->total_contribution) + floatval($contribution->bookyear->price);
                 
+                    // Put the family member's outstanding dues according to this sum
+                    // Sum: open_contribution = current open_contribution from family member + (bookyear_price - payed contribution of this contribution)
                     $member->open_contribution = floatval($member->open_contribution) + (floatval($contribution->bookyear->price) - floatval($contribution->payed));
+                    // Put the family member's paid dues against this sum
+                    // Sum: payed_contribution = current payed_contribution from family member + payed contribution of this contribution
                     $member->payed_contribution = floatval($member->payed_contribution) + floatval($contribution->payed);
+                    // Put the family member's total contributions using this sum
+                    // Sum: total_contribution = current total_contribution from family member + price of this contribution
                     $member->total_contribution = floatval($member->total_contribution) + floatval($contribution->bookyear->price);
 
+                    // Put the outstanding dues from the current dues using this sum
+                    // Sum: current open_contribution = bookyear_price - payed contribution of this contribution
                     $contribution->open_contribution = (floatval($contribution->bookyear->price) - floatval($contribution->payed));
+                    // Using this sum, put the total contribution from the current contribution
+                    // Sum: current total_contribution = bookyear_price
                     $contribution->total_contribution = floatval($contribution->bookyear->price);
                 }
             }
         }
 
+        // Add the file to this function that takes care of the table so that it is comprehensible to the user
         include './mvc/view/dashboardlist.php';
     }
 
