@@ -108,23 +108,29 @@ class Controller {
         // See if a POST request was made and if so if this is the accounting form and if all fields are included
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['bookyear_submit']) && isset($_POST['bookyear_year']) && isset($_POST['bookyear_submit']) && isset($_POST['bookyear_price'])) {
 
+            // See if the bookyear number is even a number if not throw an error
             if (!is_numeric($_POST['bookyear_year'])) {
                $error_year = 'Het jaar is geen valide nummer.';
             } else {
+                // Check if the year is between 1900 and this year
                 if ($_POST['bookyear_year'] < 1900 || $_POST['bookyear_year'] > intval(date("Y"))) {
                     $error_year = 'Het ingevoerde jaar moet tussen 1900 en '.date("Y").' zijn';
                 }
             }
             
+            // Check if the bookyear price is even a number if not throw an error
             if (!is_numeric($_POST['bookyear_price'])) {
                 $error_price = 'Het ingevoerde bedrag voor het boekjaar is geen valide nummer.';   
             } else {
+                // Check if the bookyear price is negative, if it is throw an error
                 if ($_POST['bookyear_price'] < 0) {
                     $error_price = 'Het ingevoerde bedrag mag niet negatief zijn.';
                 }   
             }
             
+            // Before adding the bookyear check if there is an error occured
             if (!isset($error_year) && !isset($error_price)) {
+                // Add the new bookyear
                 $this->model->addBookYear($_POST['bookyear_year'], $_POST['bookyear_price']);
             }
         }
@@ -134,53 +140,74 @@ class Controller {
             include './mvc/view/addBookYearForm.php';
         } else {
             // There is no database connection. Show a text that this is so.
-            echo 'Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.';
+            echo '<div class="message failure"><p>Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.</p></div>';
         }
     }
     
+    // With the editBookYearForm you can edit a financial year and get the form to edit a financial year
     public function editBookYearForm() {
+        // Add the file that controls the connection to the database
         include './inc/process/connect.php';
+        // Add the class to of a fiscal year
         include_once('./mvc/model/BookYear.php');
 
+        // Check whether the editBookYear form made a POST request and whether an ID was provided
         if (isset($_POST) && isset($_POST['bookyear_edit']) && isset($_POST['bookyear_id'])) {
+            // See if there is a also a GET request to check the financial year ID
             if (isset($_GET) && isset($_GET['id'])) {
+                // Check whether the ID of the GET and POST request match
                 if ($_GET['id'] != $_POST['bookyear_id']) {
-                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
                     return;
                 }
             }
 
+            // Check that the given financial year price is a number
             if (!is_numeric($_POST['bookyear_price'])) {
                 $error_price = 'Het ingevoerde bedrag voor het boekjaar is geen valide nummer.';   
             } else {
+                // Check that the number provided is not a negative number
                 if ($_POST['bookyear_price'] < 0) {
                     $error_price = 'Het ingevoerde bedrag mag niet negatief zijn.';
                 }   
             }
 
-            $this->model->editBookYear(new BookYear($_POST['bookyear_id'], $_POST['bookyear_year'], $_POST['bookyear_price']));
+            // Check if there are no errors occured
+            if (!isset($error_price)) {
+                $this->model->editBookYear(new BookYear($_POST['bookyear_id'], $_POST['bookyear_year'], $_POST['bookyear_price']));
+            }
         }
 
+        // Check whether a financial year has been requested using a GET request
         if (isset($_GET) && isset($_GET['id'])) {
+            // Get the requested bookyear
             $bookyear = $this->model->getBookYear($_GET['id']);
+            // Include the file with the form to edit a bookyear
             include './mvc/view/editBookYearForm.php';
         } else {
-            echo 'Geen boekjaar opgevraagd';
+            // Send the error code that there isnt a bookyear requested
+            echo '<div class="message failure"><p>Geen boekjaar opgevraagd</p></div>';
         }
         
     }
     
+    // The deleteBookYearForm is there to display a form that allows you to delete a financial year and or control the functions behind it should you delete it
     public function deleteBookYearForm() {
+        // Add the file that controls the connection to the database
         include './inc/process/connect.php';
 
+        // Check that a POST request was made and that it comes from the correct form with corresponding ID
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['bookyear_delete']) && isset($_POST['bookyear_id'])) {
+            // See if there is also a GET request with a given ID
             if (isset($_GET) && isset($_GET['id'])) {
+                // Check that the ID of the GET request matches the POST ID
                 if ($_GET['id'] != $_POST['bookyear_id']) {
-                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
                     return;
                 }
             }
             
+            // If the ID was good, this can be implemented. Deletes a financial year permanently
             $this->model->deleteBookYear($_POST['bookyear_id']);
         }
 
@@ -189,32 +216,45 @@ class Controller {
             include './mvc/view/deleteBookYearForm.php';
         } else {
             // There is no database connection. Show a text that this is so.
-            echo 'Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.';
+            echo '<div class="message failure"><p>Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.</p></div>';
         }
     }
 
-    // Families Functions
+    /* 
+    *   Family features
+    * Below you will find all functions belonging to and or related to the family page
+    */
+
+    // Use the listFamilies function to retrieve all families and display them neatly in a table
     public function listFamilies() {
+        // Retrieve all families from the database
         $Families = $this->model->getFamiliesList();
 
+        // Add the file that puts all families neatly into a table
         include './mvc/view/familieslist.php';
     }
     
+    // With the addFamilyForm, you add a new family using a form that is added when connected to a database
     public function addFamilyForm() {
+        // Add the file that controls the connection to the database
         include './inc/process/connect.php';
 
-        // See if a form was sent with method POST and if the required fields were filled in.
+        // Check that a POST request has been made and that all required fields exist 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['family_submit']) && isset($_POST['family_name']) && isset($_POST['family_address'])) {
 
+            // Check that the family name is not empty, it is mandatory that it is filled in
             if (empty($_POST['family_name'])) {
                 $error_name = 'De ingevoerde familie naam is leeg';
             }
 
+            // Check that the address is not empty, it is mandatory that it is filled in
             if (empty($_POST['family_address'])) {
                 $error_address = 'De ingevoerde adres is leeg';
             }
 
+            // If an error occurred then the family may be added to the database
             if (!isset($error_name) && !isset($error_address)) {
+                // Add the family to the database
                 $this->model->addFamily($_POST['family_name'], $_POST['family_address']);
             }
         }
@@ -224,55 +264,74 @@ class Controller {
             include './mvc/view/addFamiliesForm.php';
         } else {
             // There is no database connection. Show a text that this is so.
-            echo 'Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.';
+            echo '<div class="message failure"><p>Je kunt het toevoeg formulier niet bekijken, zolang er geen database verbinding is.</p></div>';
         }
     }
     
+    // The editFamilyForm function is there to display a form that allows you to edit a family, it also checks if there is a request to edit a family
     public function editFamilyForm() {
+        // Add the file that controls the connection to the database
         include './inc/process/connect.php';
+        // Add the family class s
         include_once('./mvc/model/Family.php');
 
+        // Check whether a POST request has been made to modify a family and whether an ID has been given to which family it refers to
         if (isset($_POST) && isset($_POST['family_edit']) && isset($_POST['family_id'])) {
+            // See if a GET request was also made with an ID
             if (isset($_GET) && isset($_GET['id'])) {
+                // Check whether the ID of the GET and POST request match each other
                 if ($_GET['id'] != $_POST['family_id']) {
-                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
                     return;
                 }
             }
 
+            // Check that at least one family name has been entered, as it is mandatory
             if (empty($_POST['family_name'])) {
                 $error_name = 'De ingevoerde familie naam is leeg';
             }
 
+            // Check whether an address has been entered with the family, as this is also mandatory
             if (empty($_POST['family_address'])) {
                 $error_address = 'De ingevoerde adres is leeg';
             }
 
+            // Check if no error messages occurred, if not adjust the family
             if (!isset($error_name) && !isset($error_address)) {
                 $this->model->editFamily(new Family($_POST['family_id'], $_POST['family_name'], $_POST['family_address']));
             }
         }
 
+        // Check if no error messages occurred, if not adjust the family
         if (isset($_GET) && isset($_GET['id'])) {
+            // Retrieve the family with the requested ID
             $family = $this->model->getFamily($_GET['id']);
+            // Add the form used to modify a family
             include './mvc/view/editFamilyForm.php';
         } else {
-            echo 'Geen familie opgevraagd';
+            // Send error message
+            echo '<div class="message failure"><p>Geen familie opgevraagd</p></div>';
         }
         
     }
     
+    // The deleteFamilyForm is to support a family removal process using a form and functions to delete a family should this be requested
     public function deleteFamilyForm() {
+        // Add the file that controls the connection to the database
         include './inc/process/connect.php';
 
+        // See if a POST request id done with fields that are required
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['family_delete']) && isset($_POST['family_id'])) {
+            // Check whether a GET request was made with a given ID
             if (isset($_GET) && isset($_GET['id'])) {
+                // Check whether the ID given in the POST request matches the GET request
                 if ($_GET['id'] != $_POST['family_id']) {
-                    echo 'Het ID komt niet overeen met meegegeven ID';
+                    echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
                     return;
                 }
             }
             
+            // If all went well, the family may be removed
             $this->model->deleteFamily($_POST['family_id']);
         }
 
@@ -281,29 +340,43 @@ class Controller {
             include './mvc/view/deleteFamilyForm.php';
         } else {
             // There is no database connection. Show a text that this is so.
-            echo 'Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.';
+            echo '<div class="message failure"><p>Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.</p></div>';
         }
     }
 
-    // Family Member Functions
+    /* 
+    *   Family Member features
+    * Below you will find all functions belonging to and or related to the family members page
+    */
+
+    // The listFamilyMembers function is used to retrieve all family members and make them visible through a table
     public function listFamilyMembers() {
+        // Collect all family members
         $FamilyMembers = $this->model->getFamilyMembersList();
 
+        // Add the file with the table that puts down all family members
         include './mvc/view/familymemberslist.php';
     }
     
+    // The addFamilyMemberForm function is there to add a form where family members can be created and or if there is a POST request to create it execute it
     public function addFamilyMemberForm() {
+        // Add the file that controls the connection to the database
         include './inc/process/connect.php';
-        // See if a form was sent with method POST and if the required fields were filled in.
+
+        // Check that a POST request has been made to add a family member and that all fields are included
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_POST['familymember_submit']) && isset($_POST['familymember_name']) && isset($_POST['familymember_family']) && isset($_POST['familymember_birthdate']) && isset($_POST['familymember_membertype'])) {
+            
+            // Check whether a family name has been entered, if not give an error message
             if (empty($_POST['familymember_name'])) {
                 $error_name = 'De ingevoerde naam is leeg';
             }
 
-            if (empty($_POST['familymember_family'])) {
+            //  Check that family is filled in and that this is a number given that it is linked to the family ID
+            if (empty($_POST['familymember_family']) || !is_numeric($_POST['familymember_family'])) {
                 $error_family = 'De ingevoerde familie is niet valide';
             }
 
+            
             if (empty($_POST['familymember_birthdate'])) {
                 $error_birthdate = 'De ingevoerde geboortedatum is incorrect';
             }

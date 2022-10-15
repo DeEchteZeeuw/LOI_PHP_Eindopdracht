@@ -348,3 +348,52 @@ table tbody tr:hover {
 [hidden="false"] {
     display: table-row;
 }
+
+/* CSS login */
+main.login {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 10px;
+}
+
+main.login section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main.login section#login {
+    grid-column: 1/2;
+    background: #333333;
+}
+
+form#login {
+    color: white;
+    width: 20vw;
+}
+
+form#login label {
+    display: block;
+    font-family: var(--font-sarabun);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 3px;
+}
+
+input {
+    display: block;
+    border: unset;
+    border-radius: 5px;
+    background: linear-gradient(45deg, #f1f1f1, #E8F0FE);
+    border: none !important;
+    box-shadow: none !important;
+    color: #1a1a1a;
+    line-height: 1.33333333;
+    width: 100%;
+    padding: 0.1875rem 0.3125rem;
+    margin: 0 6px 16px 0;
+    min-height: 40px;
+    max-height: none;
+    width: -webkit-fill-available;
+}
