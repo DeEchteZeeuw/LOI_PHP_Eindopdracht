@@ -7,9 +7,6 @@
 
             <?php $controller->listDashboard(); ?>
         </section>
-    </main>
-    <footer class="text-center">
-        <h5>&copy; 2022 - 2023 Leden Administratie Paneel</h5>
-    </footer>
+    <?php include './inc/templates/footer.php'; ?>
 </body>
 </html>

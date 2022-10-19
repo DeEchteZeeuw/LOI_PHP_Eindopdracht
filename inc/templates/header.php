@@ -1,4 +1,5 @@
 <?php
+// start the session to retrieve and view the session variables
 session_start();
 // See if the session loggedin exists and is true, if not send the user back to login
 if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {

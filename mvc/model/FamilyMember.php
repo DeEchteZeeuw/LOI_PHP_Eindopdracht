@@ -13,5 +13,16 @@ class FamilyMember {
         $this->birthdate = $birthdate;
         $this->memberType = $memberType;
     }
+
+    // Calculate age by the birthday and current date difference
+    public function age() {
+        $birthDate = date('d-m-Y', strtotime($this->birthdate));
+
+        $currentDate = date("d-m-Y");
+
+        $age = date_diff(date_create($birthDate), date_create($currentDate));
+
+        return  $age->format("%y");
+    }
 }
 ?>

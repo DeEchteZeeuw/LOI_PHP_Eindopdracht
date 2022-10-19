@@ -500,7 +500,7 @@ class Model {
         }
     }
 
-    public function deleteContribution($number = 0, $bookyear = 0, $member) {
+    public function deleteContribution($number = 0, $bookyear = 0, $member = 0) {
         // We add the connect.php for connecting to the database.
         include 'inc/process/connect.php';
 
