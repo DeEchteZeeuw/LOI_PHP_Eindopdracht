@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (password_verify($_POST['login_password'], $row['Wachtwoord'])) {
                     // If the password matches, we have a match and set the loggedin session to true and redirect the user to the dashboard
                     $_SESSION['loggedin'] = true;
+                    $_SESSION['ID'] = intval($row['ID']);
                     header("Location: dashboard.php");
                     die();
                 } else {

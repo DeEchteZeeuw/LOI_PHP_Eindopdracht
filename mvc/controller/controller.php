@@ -54,30 +54,30 @@ class Controller {
 
                     // Set the family outstanding dues to the new value using this sum
                     // Sum: open_contribution = current open_contribution from family + (bookyear_price - payed contribution of this contribution)
-                    $family->open_contribution = floatval($family->open_contribution) + (floatval($contribution->bookyear->agePrice($member->age())) - floatval($contribution->payed));
+                    $family->open_contribution = floatval($family->open_contribution) + (floatval($contribution->bookyear->agePrice($member->age(), $member->memberType->procentage)) - floatval($contribution->payed));
                     // Set the family paid contribution to the new value using this sum
                     // Sum: payed_contribution = current payed_contribution from family + payed contribution of this contribution
                     $family->payed_contribution = floatval($family->payed_contribution) + floatval($contribution->payed);
                     // Set the family total contribution to the new value using this sum
                     // Sum: total_contribution = current total_contribution from family + price of this contribution
-                    $family->total_contribution = floatval($family->total_contribution) + floatval($contribution->bookyear->agePrice($member->age()));
+                    $family->total_contribution = floatval($family->total_contribution) + floatval($contribution->bookyear->agePrice($member->age(), $member->memberType->procentage));
                 
                     // Put the family member's outstanding dues according to this sum
                     // Sum: open_contribution = current open_contribution from family member + (bookyear_price - payed contribution of this contribution)
-                    $member->open_contribution = floatval($member->open_contribution) + (floatval($contribution->bookyear->agePrice($member->age())) - floatval($contribution->payed));
+                    $member->open_contribution = floatval($member->open_contribution) + (floatval($contribution->bookyear->agePrice($member->age(), $member->memberType->procentage)) - floatval($contribution->payed));
                     // Put the family member's paid dues against this sum
                     // Sum: payed_contribution = current payed_contribution from family member + payed contribution of this contribution
                     $member->payed_contribution = floatval($member->payed_contribution) + floatval($contribution->payed);
                     // Put the family member's total contributions using this sum
                     // Sum: total_contribution = current total_contribution from family member + price of this contribution
-                    $member->total_contribution = floatval($member->total_contribution) + floatval($contribution->bookyear->agePrice($member->age()));
+                    $member->total_contribution = floatval($member->total_contribution) + floatval($contribution->bookyear->agePrice($member->age(), $member->memberType->procentage));
 
                     // Put the outstanding dues from the current dues using this sum
                     // Sum: current open_contribution = bookyear_price - payed contribution of this contribution
-                    $contribution->open_contribution = (floatval($contribution->bookyear->agePrice($member->age())) - floatval($contribution->payed));
+                    $contribution->open_contribution = (floatval($contribution->bookyear->agePrice($member->age(), $member->memberType->procentage)) - floatval($contribution->payed));
                     // Using this sum, put the total contribution from the current contribution
                     // Sum: current total_contribution = bookyear_price
-                    $contribution->total_contribution = floatval($contribution->bookyear->agePrice($member->age()));
+                    $contribution->total_contribution = floatval($contribution->bookyear->agePrice($member->age(), $member->memberType->procentage));
                 }
             }
         }
