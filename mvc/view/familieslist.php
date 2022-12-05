@@ -3,8 +3,11 @@
         <tr>
             <th>ID</th>
             <th>Naam</th>
+            <?php if (!isset($_GET['action'])) { ?>
+            <th colspan="3">&nbsp;</th>
+            <?php } else { ?>
             <th>Adres</th>
-            <th colspan="2">&nbsp;</th>
+            <?php } ?>
         </tr>
     </thead>
     <tbody>
@@ -12,7 +15,12 @@
             <tr>
                 <td><?php echo $family->ID; ?></td>
                 <td><?php echo $family->name; ?></td>
-                <td><?php echo $family->address; ?></td>
+                <?php if (!isset($_GET['action'])) { ?>
+=               <td>
+                    <a href="./families.php?action=view&id=<?php echo $family->ID; ?>">    
+                        <button class="primary">Bekijken</button>
+                    </a>
+                </td>
                 <td>
                     <a href="./families.php?action=update&id=<?php echo $family->ID; ?>">    
                         <button class="watchout">Bijwerken</button>
@@ -23,6 +31,9 @@
                         <button class="failure">Verwijderen</button>
                     </a>
                 </td>
+                <?php } else { ?>
+                <td><?php echo $family->address; ?></td>
+                <?php } ?>
             </tr>
         <?php } ?>
     </tbody>

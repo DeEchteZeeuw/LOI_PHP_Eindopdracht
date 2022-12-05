@@ -4,12 +4,15 @@
 
             <?php if (isset($_GET['action']) && $_GET['action'] === 'add') { ?>
                 <?php $controller->addBookYearForm(); ?>
-            <?php } elseif (isset($_GET['id']) && isset($_GET['action']) && ($_GET['action'] === 'update' || $_GET['action'] === 'delete')) { ?>
+            <?php } elseif (isset($_GET['id']) && isset($_GET['action']) && ($_GET['action'] === 'update' || $_GET['action'] === 'view' || $_GET['action'] === 'delete')) { ?>
                 <?php if ($_GET['action'] === 'update') { ?>
                     <?php $controller->editBookYearForm(); ?>
                 <?php } ?>
                 <?php if ($_GET['action'] === 'delete') { ?>
                     <?php $controller->deleteBookYearForm(); ?>
+                <?php } ?>
+                <?php if ($_GET['action'] === 'view') { ?>
+                    <?php $controller->viewBookYear(); ?>
                 <?php } ?>
             <?php } else { ?>
             <a href="./boekjaar.php?action=add">

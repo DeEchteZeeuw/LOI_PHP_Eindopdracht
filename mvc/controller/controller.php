@@ -99,6 +99,21 @@ class Controller {
         // Add the file that provides a table so we can make the fiscal years transparent
         include './mvc/view/bookyearlist.php';
     }
+
+    // This feature creates the view of detail page
+    public function viewBookYear() {
+        // Check whether a financial year has been requested using a GET request
+        if (isset($_GET) && isset($_GET['id'])) {
+            // Get the requested bookyear
+            $BookYears = [$this->model->getBookYear($_GET['id'])];
+            
+            // Add the file that provides a table so we can make the fiscal years transparent
+            include './mvc/view/bookyearlist.php';
+        } else {
+            // Send the error code that there isnt a bookyear requested
+            echo '<div class="message failure"><p>Geen boekjaar opgevraagd</p></div>';
+        }
+    }
     
     // The addBookYearForm function was created to provide form handling and insight into the form
     public function addBookYearForm() {
@@ -233,6 +248,27 @@ class Controller {
         // Add the file that puts all families neatly into a table
         include './mvc/view/familieslist.php';
     }
+
+    // This feature creates the view of detail page
+    public function viewFamily() {
+        // Add the file that controls the connection to the database
+        include './inc/process/connect.php';
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            // Check if no error messages occurred, if not view the family
+            if (isset($_GET) && isset($_GET['id'])) {
+                // Retrieve the family with the requested ID
+                $Families = [$this->model->getFamily($_GET['id'])];
+                // Add the table to view the family
+                include './mvc/view/familieslist.php';
+            } else {
+                // Send error message
+                echo '<div class="message failure"><p>Geen familie opgevraagd</p></div>';
+            }
+        } else {
+            echo '<div class="message failure"><p>Je kunt geen detail pagina kijken, zolang er geen verbinding is.</p></div>';
+        }
+    }
     
     // With the addFamilyForm, you add a new family using a form that is added when connected to a database
     public function addFamilyForm() {
@@ -361,6 +397,27 @@ class Controller {
 
         // Add the file with the table that puts down all family members
         include './mvc/view/familymemberslist.php';
+    }
+
+    // This feature creates the view of detail page
+    public function viewFamilyMember() {
+        // Add the file that controls the connection to the database
+        include './inc/process/connect.php';
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            // Check if no error messages occurred, if not view the family member
+            if (isset($_GET) && isset($_GET['id'])) {
+                // Retrieve the family with the requested ID
+                $FamilyMembers = [$this->model->getFamilyMember($_GET['id'])];
+                // Add the form used to modify a family
+                include './mvc/view/familymemberslist.php';
+            } else {
+                // Send error message
+                echo '<div class="message failure"><p>Geen familie opgevraagd</p></div>';
+            }
+        } else {
+            echo '<div class="message failure"><p>Je kunt geen detail pagina kijken, zolang er geen verbinding is.</p></div>';
+        }
     }
     
     // The addFamilyMemberForm function is there to add a form where family members can be created and or if there is a POST request to create it execute it
@@ -522,6 +579,27 @@ class Controller {
         // Add the table where all contributions are put in
         include './mvc/view/contributionslist.php';
     }
+
+    // This feature creates the view of detail page
+    public function viewContribution() {
+        // Add the file that controls the connection to the database
+        include './inc/process/connect.php';
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            // Check if no error messages occurred, if not view the contribution
+            if (isset($_GET) && isset($_GET['id'])) {
+                // Retrieve the contributio with the requested ID
+                $Contributions = [$this->model->getContribution($_GET['id'])];
+                // Add the form used to modify a contribution
+                include './mvc/view/contributionslist.php';
+            } else {
+                // Send error message
+                echo '<div class="message failure"><p>Geen contributie opgevraagd</p></div>';
+            }
+        } else {
+            echo '<div class="message failure"><p>Je kunt geen detail pagina kijken, zolang er geen verbinding is.</p></div>';
+        }
+    }
     
     // The addContributionForm is there to display a form that the user can use to add a contribution and be shot into the database with it
     public function addContributionForm() {
@@ -537,7 +615,7 @@ class Controller {
             }
 
             // check that the payment field is numeric and not negative, because 0 is also empty if something is wrong throw an error message
-            if (!is_float($_POST['contribution_payed']) || $_POST['contribution_payed'] < 0) {
+            if (!is_numeric($_POST['contribution_payed']) || $_POST['contribution_payed'] < 0) {
                 $error_payed = 'De ingevoerde betaalde bedrag is leeg';
             }
 
@@ -672,6 +750,27 @@ class Controller {
         // Add the table in which all memberTypes are processed
         include './mvc/view/membertypeslist.php';
     }
+
+    // This feature creates the view of detail page
+    public function viewMemberType() {
+        // Add the file that controls the connection to the database
+        include './inc/process/connect.php';
+        // See if the conn variable is declared and if it has a value. 
+        if (isset($conn) && $conn) {
+            // Check if no error messages occurred, if not view the membertype
+            if (isset($_GET) && isset($_GET['id'])) {
+                // Retrieve the membertype with the requested ID
+                $MemberTypes = [$this->model->getMemberType($_GET['id'])];
+                // Add the form used to modify a membertypes
+                include './mvc/view/membertypeslist.php';
+            } else {
+                // Send error message
+                echo '<div class="message failure"><p>Geen abonnement opgevraagd</p></div>';
+            }
+        } else {
+            echo '<div class="message failure"><p>Je kunt geen detail pagina kijken, zolang er geen verbinding is.</p></div>';
+        }
+    }
     
     // The addMemberTypeForm is there to visually add a subscription or memberType to the database through a form
     public function addMemberTypeForm() {
@@ -795,4 +894,11 @@ class Controller {
             echo '<div class="message failure"><p>Je kunt het verwijder formulier niet bekijken, zolang er geen database verbinding is.</p></div>';
         }
     }
+}
+
+function validateDate($date, $format = 'Y-m-d')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
+    return $d && $d->format($format) === $date;
 }

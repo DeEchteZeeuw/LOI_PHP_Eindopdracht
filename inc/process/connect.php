@@ -1,7 +1,7 @@
 <?php
     $servername = "localhost"; // Hostname most of the times localhost
     $username = "root"; // Username of the admin account of the database 
-    $password = "root"; // Password to the database 
+    $password = "lol123lol"; // Password to the database 
     $database = "ledenadministratie"; // Name of the database
 
     // Here a connection is attempted with a try catch. This allows your code to continue even if to goes wrong.
