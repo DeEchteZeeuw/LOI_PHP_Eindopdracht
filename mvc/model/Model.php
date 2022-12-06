@@ -246,6 +246,7 @@ class Model {
         } catch(PDOException $e) {
             // If an error occurred echo this and return null
             echo '<div class="message failure"><p><strong>Foutmelding:</strong> ' . $e->getMessage() . '</p></div>';
+            return;
         }
     }
 
@@ -415,7 +416,12 @@ class Model {
         } catch(PDOException $e) {
             // If an error occurred echo this and return null
             echo '<div class="message failure"><p><strong>Foutmelding:</strong> ' . $e->getMessage() . '</p></div>';
+            return;
         }
+        
+        $bookyear = $this->model->getBookYear(false, date("Y"));
+                
+        $this->model->addContribution($conn->lastInsertId(), floatval(0), $bookyear->ID);
     }
 
     // With the editFamilyMember function, we can modify a specific family member in the database by changing the object we brought from the familymember parameter
