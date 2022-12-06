@@ -669,7 +669,7 @@ class Controller {
             }
 
             // See if the pay field is a number and if it is not negative if 1 of the 2 is the case throw an error message
-            if (!is_float($_POST['contribution_payed']) || $_POST['contribution_payed'] < 0) {
+            if (!is_numeric($_POST['contribution_payed']) || $_POST['contribution_payed'] < 0) {
                 $error_payed = 'De ingevoerde betaalde bedrag is leeg';
             }
 
