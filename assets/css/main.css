@@ -397,3 +397,7 @@ input {
     max-height: none;
     width: -webkit-fill-available;
 }
+
+label {
+    display: block;
+}

@@ -138,8 +138,8 @@ class Controller {
                 $error_price = 'Het ingevoerde bedrag voor het boekjaar is geen valide nummer.';   
             } else {
                 // Check if the bookyear price is negative, if it is throw an error
-                if ($_POST['bookyear_price'] < 0) {
-                    $error_price = 'Het ingevoerde bedrag mag niet negatief zijn.';
+                if ($_POST['bookyear_price'] <= 100) {
+                    $error_price = 'Het ingevoerde bedrag mag niet negatief en onder de 100 zijn.';
                 }   
             }
             
@@ -173,7 +173,7 @@ class Controller {
                 // Check whether the ID of the GET and POST request match
                 if ($_GET['id'] != $_POST['bookyear_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
 
@@ -218,7 +218,7 @@ class Controller {
                 // Check that the ID of the GET request matches the POST ID
                 if ($_GET['id'] != $_POST['bookyear_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
             
@@ -318,7 +318,7 @@ class Controller {
                 // Check whether the ID of the GET and POST request match each other
                 if ($_GET['id'] != $_POST['family_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
 
@@ -368,7 +368,7 @@ class Controller {
                 // Check whether the ID given in the POST request matches the GET request
                 if ($_GET['id'] != $_POST['family_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
             
@@ -484,7 +484,7 @@ class Controller {
                 // See if the 2 IDs of the GET and POST match if not throw an error
                 if ($_GET['id'] != $_POST['familymember_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
 
@@ -549,7 +549,7 @@ class Controller {
                 // Compare the GET and POST ID and if they don't match throw an error message
                 if ($_GET['id'] != $_POST['familymember_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
             
@@ -659,7 +659,7 @@ class Controller {
                 // Compare the GET and POST ID if they do not match throw an error message
                 if ($_GET['id'] != $_POST['contribution_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
 
@@ -720,7 +720,7 @@ class Controller {
                 // Compare the GET and POST ID and if they don't match you throw an error message
                 if ($_GET['id'] != $_POST['contribution_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
 
@@ -824,7 +824,7 @@ class Controller {
                 // Compare the ID of the GET and POST request with each other if they do not match throw an error message
                 if ($_GET['id'] != $_POST['membertype_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
 
@@ -878,7 +878,7 @@ class Controller {
                 // Compare the GET and POST ID and if they don't match you throw an error message
                 if ($_GET['id'] != $_POST['membertype_id']) {
                     echo '<div class="message failure"><p>Het ID komt niet overeen met meegegeven ID</p></div>';
-                    return;
+                    
                 }
             }
             

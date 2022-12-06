@@ -5,7 +5,7 @@
     </label>
     <label for="bookyear_price">
         Bedrag <?php if (isset($error_price)) echo '<span class="error">' . $error_price . '</span>'; ?>
-        <input type="number" name="bookyear_price" id="bookyear_price" required step="0.01">
+        <input type="number" name="bookyear_price" id="bookyear_price" required step="0.01" min="100">
     </label>
     <input type="submit" id="bookyear_submit" name="bookyear_submit" value="Toevoegen">
 </form>

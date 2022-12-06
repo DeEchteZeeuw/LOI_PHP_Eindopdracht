@@ -9,7 +9,7 @@
             <?php foreach($families as $family) { ?>
             <option value="<?php echo $family->ID; ?>"><?php echo $family->name; ?></option>
             <?php } ?>
-        </select>
+        </select><br>
     </label>
     <label for="familymember_birthdate">
         Geboortedatum <?php if (isset($error_birthdate)) echo '<span class="error">' . $error_birthdate . '</span>'; ?>
