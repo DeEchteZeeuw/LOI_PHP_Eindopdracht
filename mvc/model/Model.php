@@ -47,18 +47,28 @@ class Model {
     } 
 
     // The getBookYear retrieves one fiscal year from the database using supplied ID and returns it to the user
-    public function getBookYear($number) {
+    public function getBookYear($number, $year = false) {
         // Add the file that connects to the database
         include 'inc/process/connect.php';
 
         try {
-            // We create the select query to which we pass a WHERE parameter in the boekjaar table
-            $stmt = $conn->prepare("SELECT * FROM boekjaar WHERE ID = :id");
-           
-            // Link the bookyear number to the paramater ID.
-            $stmt->execute([
-                'id' => $number
-            ]);
+            if (!$year) { 
+                // We create the select query to which we pass a WHERE parameter in the boekjaar table
+                $stmt = $conn->prepare("SELECT * FROM boekjaar WHERE ID = :id");
+
+                // Link the bookyear number to the paramater ID.
+                $stmt->execute([
+                    'id' => $number
+                ]);
+            } else {
+                // We create the select query to which we pass a WHERE parameter in the boekjaar table
+                $stmt = $conn->prepare("SELECT * FROM boekjaar WHERE ID = :jaar");
+
+                // Link the bookyear number to the paramater Year.
+                $stmt->execute([
+                    'jaar' => $year
+                ]);
+            }
 
             // Go through the result of the query that was executed
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
